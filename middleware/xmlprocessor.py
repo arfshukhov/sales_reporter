@@ -11,6 +11,5 @@ class XMLProcessor:
         sales_data = raw_data["sales_data"]
         sales_data["date"] = sales_data.pop("@date")
         return SalesData(
-                date=sales_data["date"],
-                products=sales_data["products"]["product"]
+            date=sales_data["date"], products=sales_data["products"]["product"]
         )

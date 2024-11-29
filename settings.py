@@ -15,25 +15,25 @@ if os.path.exists(DOT_ENV_PATH):
 
 
 class ServerSettings:
-    ENVIRONMENT = os.getenv('ENVIRONMENT', 'local')
-    API_PATH = os.getenv('API_PATH', "/api/v1")
-    HOST = os.getenv('HOST', '127.0.0.1')
-    PORT = os.getenv('PORT', 8888)
-    SECRET_KEY = os.getenv('SECRET_KEY') #str(uuid.uuid4().hex)
-    LLM_API_KEY = os.getenv('LLM_API_KEY')
+    ENVIRONMENT = os.getenv("ENVIRONMENT", "local")
+    API_PATH = os.getenv("API_PATH", "/api/v1")
+    HOST = os.getenv("HOST", "127.0.0.1")
+    PORT = os.getenv("PORT", 8888)
+    SECRET_KEY = os.getenv("SECRET_KEY")  # str(uuid.uuid4().hex)
+    LLM_API_KEY = os.getenv("LLM_API_KEY")
 
 
 class DBSettings:
     """
     Данный класс хранит данные для подключения к БД
     """
-    DB_PORT: str = os.getenv("DB_PORT", "5432") # порт
-    DB_HOST: str = os.getenv("DB_HOST", "localhost") # хост базы данных
-    DB_PASSWORD: str = os.getenv("DB_PASSWORD", "12345678") # пароль
-    DB_USER: str = os.getenv("DB_USER", "postgres") # пользователь
-    DB_NAME: str = os.getenv("DB_NAME", "postgres") # название базы
-    DB_KIND: str = os.getenv("DB_KIND", "sqlite") # вид базы данных: Postgres | SQLite
 
+    DB_PORT: str = os.getenv("DB_PORT", "5432")  # порт
+    DB_HOST: str = os.getenv("DB_HOST", "localhost")  # хост базы данных
+    DB_PASSWORD: str = os.getenv("DB_PASSWORD", "12345678")  # пароль
+    DB_USER: str = os.getenv("DB_USER", "postgres")  # пользователь
+    DB_NAME: str = os.getenv("DB_NAME", "postgres")  # название базы
+    DB_KIND: str = os.getenv("DB_KIND", "sqlite")  # вид базы данных: Postgres | SQLite
 
     @classmethod
     def uri(cls) -> str:
@@ -42,8 +42,10 @@ class DBSettings:
         к БД PostgreSQL
         :return: uri: str
         """
-        uri: str = f"postgresql+psycopg://{cls.DB_USER}:{cls.DB_PASSWORD}"\
-               f"@{cls.DB_HOST}:{cls.DB_PORT}/{cls.DB_NAME}"
-        if ServerSettings.ENVIRONMENT != 'local':
+        uri: str = (
+            f"postgresql+psycopg://{cls.DB_USER}:{cls.DB_PASSWORD}"
+            f"@{cls.DB_HOST}:{cls.DB_PORT}/{cls.DB_NAME}"
+        )
+        if ServerSettings.ENVIRONMENT != "local":
             uri += "?sslmode=require"
         return uri

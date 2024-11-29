@@ -1,12 +1,11 @@
 from pydantic import BaseModel
 from sqlalchemy import create_engine, Column, Integer, Date, String, Float, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
-from fastapi.openapi.models import Example
-from typing import List
+from typing import List, Optional
 from datetime import date
 from settings import DBSettings
 
-from sqlalchemy.orm import relationship, Mapped,Session
+from sqlalchemy.orm import relationship, Mapped, Session
 
 Base = declarative_base()
 if DBSettings.DB_KIND == "sqlite":
@@ -28,9 +27,13 @@ class Product(BaseModel):
 
 
 class Report(BaseModel):
-    id: int
+    id: Optional[int]
     date: date
     report: str
+
+    class Config:
+        from_attributes = True
+        nullable = True
 
 
 class SalesData(BaseModel):
@@ -41,8 +44,13 @@ class SalesData(BaseModel):
         from_attributes = True
 
 
+class Error404(BaseModel):
+    code: str = 404
+    description: str
+
+
 class ProductModel(Base):
-    __tablename__ = 'product'
+    __tablename__ = "product"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
@@ -55,7 +63,7 @@ class ProductModel(Base):
 
 
 class SalesDataModel(Base):
-    __tablename__ = 'sales_data'
+    __tablename__ = "sales_data"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     date = Column(Date, unique=True, nullable=False)
@@ -64,15 +72,17 @@ class SalesDataModel(Base):
         "ProductModel", back_populates="sales_data", cascade="all, delete-orphan"
     )
 
+
 class ReportModel(Base):
-    __tablename__ = 'report'
+    __tablename__ = "report"
     id = Column(Integer, primary_key=True, autoincrement=True)
     date = Column(Date, unique=True, nullable=False)
     report = Column(String, nullable=False)
 
+
 Base.metadata.create_all(engine)
+
 
 def get_db():
     with Session(engine) as session:
         yield session
-

@@ -1,5 +1,11 @@
 fastapi~=0.115.5
+uvicorn
 xmltodict~=0.14.2
 starlette~=0.41.3
 pydantic~=2.9.2
 SQLAlchemy~=2.0.36
+gigachat~=0.1.36
+celery
+celery[redis]
+python-dotenv~=1.0.1
+tzdata
